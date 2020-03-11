@@ -50,7 +50,17 @@ class UserController {
       name: Yup.string(),
       email: Yup.string().email(),
       job: Yup.string(),
-      password: Yup.string(),
+      oldPassword: Yup.string().min(6),
+      password: Yup.string()
+        .min(6)
+        .when('oldPassword', (oldPassword, field) =>
+          oldPassword ? field.required() : field
+        ),
+      confirmPassword: Yup.string()
+        .min(6)
+        .when('password', (password, field) =>
+          password ? field.required() : field
+        ),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -64,14 +74,39 @@ class UserController {
     }
 
     if (req.body.email) {
+      const checkEmail = await User.findOne({
+        where: { email: req.body.email },
+      });
+
+      if (checkEmail) {
+        return res
+          .status(401)
+          .json({ error: 'The email address is already in use' });
+      }
     }
 
-    return res.json(checkUser);
+    const { oldPassword, password, confirmPassword } = req.body;
+
+    if (oldPassword || password || confirmPassword) {
+      if (oldPassword && !(await checkUser.checkPassword(oldPassword))) {
+        return res.status(401).json({ error: 'Old password does not match' });
+      }
+
+      if (password !== confirmPassword) {
+        return res.status(401).json({
+          error: 'New password does not match with confirm password',
+        });
+      }
+    }
+
+    const { id, name, email, job } = await checkUser.update(req.body);
+
+    return res.json({ id, name, email, job });
   }
 
   async delete(req, res) {
     const checkUser = await User.findByPk(req.params.id, {
-      attributes: ['id', 'name', 'email', 'job',]
+      attributes: ['id', 'name', 'email', 'job'],
     });
 
     if (!checkUser) {

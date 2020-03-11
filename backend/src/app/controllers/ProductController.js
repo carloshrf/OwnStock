@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 import Product from '../models/Product';
 
 class ProductController {
@@ -14,6 +15,17 @@ class ProductController {
   }
 
   async update(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string(),
+      description: Yup.string(),
+      category: Yup.string(),
+      quantity: Yup.number(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Data validation fails' });
+    }
+
     const product = await Product.findOne({
       where: { id: req.params.id },
     });

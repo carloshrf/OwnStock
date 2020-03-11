@@ -1,6 +1,6 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('products', {
+    return queryInterface.createTable('categories', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -11,34 +11,18 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      description: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      category: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      unity: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      quantity: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
       },
       updated_at: {
         type: Sequelize.DATE,
-        allowNull: false,
+        allowNull: Sequelize.DATE,
       },
     });
   },
 
   down: queryInterface => {
-    return queryInterface.dropTable('products');
+    return queryInterface.dropTable('categories');
   },
 };

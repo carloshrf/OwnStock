@@ -9,6 +9,18 @@ class ProductController {
   }
 
   async store(req, res) {
+    const schema = Yup.object().shape({
+      name: Yup.string(),
+      description: Yup.string(),
+      classification_id: Yup.number(),
+      quantity: Yup.number(),
+      unit_id: Yup.number(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Data validation fails' });
+    }
+
     const product = await Product.create(req.body);
 
     return res.json(product);
@@ -18,8 +30,9 @@ class ProductController {
     const schema = Yup.object().shape({
       name: Yup.string(),
       description: Yup.string(),
-      category: Yup.string(),
+      classification_id: Yup.number(),
       quantity: Yup.number(),
+      unit_id: Yup.number(),
     });
 
     if (!(await schema.isValid(req.body))) {

@@ -6,15 +6,25 @@ class Product extends Model {
       {
         name: Sequelize.STRING,
         description: Sequelize.STRING,
-        category: Sequelize.STRING,
         quantity: Sequelize.INTEGER,
-        unity: Sequelize.STRING,
       },
       {
         sequelize,
       }
     );
     return this;
+  }
+
+  static associate(models) {
+    this.belongsTo(models.Classification, {
+      foreignKey: 'classification_id',
+      as: 'classification',
+    });
+
+    this.belongsTo(models.Unit, {
+      foreignKey: 'unit_id',
+      as: 'unit',
+    });
   }
 }
 

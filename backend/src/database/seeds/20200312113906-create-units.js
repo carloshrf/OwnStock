@@ -1,40 +1,59 @@
 module.exports = {
   up: queryInterface => {
     return queryInterface.bulkInsert(
-      'classifications',
+      'units',
       [
         {
-          name: 'Frios',
+          name: 'Unidade',
+          symbol: 'UN',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          name: 'Carnes',
+          name: 'Centena',
+          symbol: 'CENT',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          name: 'Grãos',
+          name: 'Fardo',
+          symbol: 'FARDO',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          name: 'Bebidas',
+          name: 'Quilogra',
+          symbol: 'KG',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          name: 'Limpeza',
+          name: 'Litro',
+          symbol: 'L',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          name: 'Higiene',
+          name: 'Lata',
+          symbol: 'LATA',
           created_at: new Date(),
           updated_at: new Date(),
         },
         {
-          name: 'Construcao',
+          name: 'Rolo',
+          symbol: 'RL',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          name: 'Tonelada',
+          symbol: 'TON',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          name: 'Peca',
+          symbol: 'PC',
           created_at: new Date(),
           updated_at: new Date(),
         },

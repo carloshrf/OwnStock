@@ -1,9 +1,24 @@
 import * as Yup from 'yup';
+import Unit from '../models/Unit';
+import Classification from '../models/Classification';
 import Product from '../models/Product';
 
 class ProductController {
   async index(req, res) {
-    const product = await Product.findAll();
+    const product = await Product.findAll({
+      include: [
+        {
+          model: Unit,
+          as: 'unit',
+          attributes: ['symbol', 'name'],
+        },
+        {
+          model: Classification,
+          as: 'classification',
+          attributes: ['name'],
+        },
+      ],
+    });
 
     return res.json(product);
   }

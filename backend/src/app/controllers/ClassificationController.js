@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import Classification from '../models/Classification';
+import Product from '../models/Product';
 
 class ClassificationController {
   async index(req, res) {
@@ -52,6 +53,17 @@ class ClassificationController {
     if (!classification) {
       return res.status(401).json({
         error: 'Does not exists a classification with the informed ID',
+      });
+    }
+
+    const product = await Product.findOne({
+      where: { classification_id: req.params.id },
+    });
+
+    if (product) {
+      return res.status(401).json({
+        error:
+          'There is a product registred with this classification, please, first remove all products with this classification before delete it.',
       });
     }
 

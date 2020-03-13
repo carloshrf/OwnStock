@@ -3,7 +3,7 @@ module.exports = {
   host: '192.168.99.100',
   username: 'postgres',
   password: 'docker',
-  database: 'cozybrew',
+  database: 'ownstock',
   define: {
     timestapms: true,
     underscored: true,

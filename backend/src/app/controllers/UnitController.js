@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import Unit from '../models/Unit';
+import Product from '../models/Product';
 
 class UnitControll {
   async index(req, res) {
@@ -59,6 +60,17 @@ class UnitControll {
 
     if (!unit) {
       return res.status(401).json({ error: 'Unit does not exists' });
+    }
+
+    const product = await Product.findOne({
+      where: { unit_id: req.params.id },
+    });
+
+    if (product) {
+      return res.status(401).json({
+        error:
+          'There is a product registred with this unit, please, first remove all products with this unit before delete it.',
+      });
     }
 
     await unit.destroy();

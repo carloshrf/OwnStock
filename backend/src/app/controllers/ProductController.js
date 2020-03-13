@@ -5,6 +5,24 @@ import Product from '../models/Product';
 
 class ProductController {
   async index(req, res) {
+    if (req.query.id) {
+      const product = await Product.findByPk(req.query.id, {
+        include: [
+          {
+            model: Unit,
+            as: 'unit',
+            attributes: ['symbol', 'name'],
+          },
+          {
+            model: Classification,
+            as: 'classification',
+            attributes: ['name'],
+          },
+        ],
+      });
+      return res.json(product);
+    }
+
     const product = await Product.findAll({
       include: [
         {

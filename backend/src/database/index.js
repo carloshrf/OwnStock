@@ -3,9 +3,10 @@ import databaseConfig from '../config/database';
 import User from '../app/models/User';
 import Product from '../app/models/Product';
 import Classification from '../app/models/Classification';
+import Provider from '../app/models/Provider';
 import Unit from '../app/models/Unit';
 
-const models = [User, Product, Classification, Unit];
+const models = [User, Product, Classification, Unit, Provider];
 
 class Database {
   constructor() {

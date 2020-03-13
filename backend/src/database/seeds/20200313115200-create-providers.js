@@ -1,0 +1,63 @@
+module.exports = {
+  up: queryInterface => {
+    return queryInterface.bulkInsert(
+      'providers',
+      [
+        {
+          name: 'MAKRO',
+          type: true,
+          register_number: '41333691000122',
+          country: 'Brasil',
+          city: 'Fortaleza',
+          street: 'CE-41',
+          number: 'S/N',
+          complement: 'Proximo ao viaduto da BR na altura do Aeroporto',
+          zip_code: '60060-100',
+          email: 'makro@email.com',
+          phone_number_1: '85989999999',
+          phone_number_2: '8533333333',
+          contact_name: 'Alexandre o Grande',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          name: 'Bill Gates',
+          type: false,
+          register_number: '22422546655',
+          country: 'EUA',
+          city: 'Florida',
+          street: 'Palm Beach Condad',
+          number: 'S/N',
+          complement: 'Próximo ao clube de golfe',
+          zip_code: '554556',
+          email: 'bilzimgatim1967@email.com',
+          phone_number_1: '32556525441',
+          phone_number_2: '325547488545',
+          contact_name: 'O próprio, Bill Gates',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+        {
+          name: 'Casa Magalhães',
+          type: true,
+          register_number: '07445454000122',
+          country: 'Brasil',
+          city: 'Fortaleza',
+          street: 'Rua Luiza Miranda Coelho',
+          number: '800',
+          complement: 'Próximo ao Motel Dragon',
+          zip_code: '60000-00',
+          email: 'casamagalhaes@email.com',
+          phone_number_1: '8540113750',
+          phone_number_2: '8540112542',
+          contact_name: 'George',
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      ],
+      {}
+    );
+  },
+
+  down: () => {},
+};

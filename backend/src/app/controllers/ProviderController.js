@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import Provider from '../models/Provider';
 
 class ProviderController {
@@ -33,6 +34,16 @@ class ProviderController {
       return res.status(401).json({ error: 'Data validation fails' });
     }
 
+    const checkProvider = await Provider.findOne({
+      where: { register_number: req.body.register_number },
+    });
+
+    if (checkProvider) {
+      return res
+        .status(401)
+        .json({ error: 'The register number is already registred' });
+    }
+
     const provider = await Provider.create(req.body);
 
     return res.json(provider);
@@ -40,19 +51,19 @@ class ProviderController {
 
   async update(req, res) {
     const schema = Yup.object().shape({
-      name: Yup.string().required(),
-      type: Yup.boolean().required(),
-      register_number: Yup.string().required(),
-      country: Yup.string().required(),
-      city: Yup.string().required(),
-      street: Yup.string().required(),
-      number: Yup.string().required(),
+      name: Yup.string(),
+      type: Yup.boolean(),
+      register_number: Yup.string(),
+      country: Yup.string(),
+      city: Yup.string(),
+      street: Yup.string(),
+      number: Yup.string(),
       complement: Yup.string(),
-      zip_code: Yup.string().required(),
+      zip_code: Yup.string(),
       email: Yup.string(),
       phone_number_1: Yup.string(),
       phone_number_2: Yup.string(),
-      contact_name: Yup.string().required(),
+      contact_name: Yup.string(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -60,18 +71,24 @@ class ProviderController {
     }
 
     const checkProvider = await Provider.findByPk(req.params.id);
-    // STOPPED ===========================================================
-    if (req.body.register_number) {
-      const checkRegisteNumber = await findOne({
-        distinct: 'id',
-        where: { register_number: req.body.register_number },
-      });
+
+    if (!checkProvider) {
+      return res.status(401).json({ error: 'Provider ID does not exists' });
     }
 
-    if (checkProvider.register_number === req.body.register_number) {
-      return res.status(401).json({
-        error: 'There is a provider registred with this register number',
+    if (req.body.register_number) {
+      const checkRegisterNumber = await Provider.findOne({
+        where: {
+          id: { [Op.ne]: checkProvider.id },
+          register_number: req.body.register_number,
+        },
       });
+
+      if (checkRegisterNumber) {
+        return res.status(401).json({
+          error: 'There is a provider registred with this register number',
+        });
+      }
     }
 
     const provider = await checkProvider.update(req.body);

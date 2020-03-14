@@ -5,7 +5,7 @@ class Provider extends Model {
     super.init(
       {
         name: Sequelize.STRING,
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.BOOLEAN, // true for companies false for physical persons
         register_number: Sequelize.STRING,
         country: Sequelize.STRING,
         city: Sequelize.STRING,

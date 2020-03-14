@@ -1,5 +1,6 @@
 // import * as Yup from 'yup';
 import * as Yup from 'yup';
+import { Op } from 'sequelize';
 import User from '../models/User';
 
 class UserController {
@@ -75,7 +76,10 @@ class UserController {
 
     if (req.body.email) {
       const checkEmail = await User.findOne({
-        where: { email: req.body.email },
+        where: {
+          id: { [Op.ne]: checkUser.id },
+          email: req.body.email,
+        },
       });
 
       if (checkEmail) {

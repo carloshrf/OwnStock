@@ -24,7 +24,7 @@ class ProviderController {
       number: Yup.string().required(),
       complement: Yup.string(),
       zip_code: Yup.string().required(),
-      email: Yup.string(),
+      email: Yup.string().email(),
       phone_number_1: Yup.string(),
       phone_number_2: Yup.string(),
       contact_name: Yup.string().required(),

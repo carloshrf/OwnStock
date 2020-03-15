@@ -7,6 +7,7 @@ import ProductController from './app/controllers/ProductController';
 import ClassificationController from './app/controllers/ClassificationController';
 import UnitController from './app/controllers/UnitController';
 import ProviderController from './app/controllers/ProviderController';
+import OrderController from './app/controllers/OrderController';
 
 const routes = new Router();
 
@@ -38,5 +39,10 @@ routes.get('/providers', ProviderController.index);
 routes.post('/providers', ProviderController.store);
 routes.put('/providers/:id', ProviderController.update);
 routes.delete('/providers/:id', ProviderController.delete);
+
+routes.get('/orders', OrderController.index);
+routes.post('/orders', OrderController.store);
+routes.put('/orders/:id', OrderController.update);
+routes.delete('/orders/:id', OrderController.delete);
 
 export default routes;

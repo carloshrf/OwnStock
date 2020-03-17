@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { parseISO } from 'date-fns';
 import Order from '../models/Order';
 import Provider from '../models/Provider';
 import Product from '../models/Product';
@@ -25,13 +26,13 @@ class OrderControll {
   async store(req, res) {
     const schema = Yup.object().shape({
       type: Yup.boolean().required(),
-      product_id: Yup.integer().required(),
-      provider_id: Yup.integer().required(),
-      quantity: Yup.integer().required(),
-      price: Yup.integer().required(),
+      product_id: Yup.number().required(),
+      provider_id: Yup.number().required(),
+      quantity: Yup.number().required(),
+      price: Yup.number().required(),
     });
 
-    if (schema.isValid(req.body)) {
+    if (!(await schema.isValid(req.body))) {
       return res.status(401).json({ error: 'Data validation fails' });
     }
 
@@ -62,10 +63,17 @@ class OrderControll {
       provider_id: Yup.number(),
       quantity: Yup.number(),
       price: Yup.number(),
+      canceled_at: Yup.date(),
     });
 
     if (!(await schema.isValid(req.body))) {
       return res.status(401).json({ error: 'Data validation fails' });
+    }
+
+    const canceled = req.body.canceled_at;
+
+    if (canceled) {
+      req.body.canceled_at = parseISO(req.body.canceled_at);
     }
 
     const checkOrder = await Order.findOne({

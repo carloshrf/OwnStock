@@ -7,6 +7,7 @@ class Order extends Model {
         type: Sequelize.BOOLEAN,
         quantity: Sequelize.INTEGER,
         price: Sequelize.DECIMAL,
+        canceled_at: Sequelize.DATE,
       },
       {
         sequelize,

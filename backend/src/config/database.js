@@ -5,7 +5,7 @@ module.exports = {
   password: 'docker',
   database: 'ownstock',
   define: {
-    timestapms: true,
+    timestamps: true,
     underscored: true,
     underscoredAll: true,
   },

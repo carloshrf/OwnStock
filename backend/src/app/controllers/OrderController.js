@@ -1,12 +1,56 @@
 import * as Yup from 'yup';
 import { parseISO } from 'date-fns';
+import { Op } from 'sequelize';
 import Order from '../models/Order';
 import Provider from '../models/Provider';
 import Product from '../models/Product';
 
 class OrderControll {
   async index(req, res) {
+    if (req.query.canceled === 'true') {
+      const order = await Order.findAll({
+        include: [
+          {
+            model: Provider,
+            as: 'provider',
+            attributes: ['name', 'register_number'],
+          },
+          {
+            model: Product,
+            as: 'product',
+            attributes: ['name'],
+          },
+        ],
+      });
+
+      return res.json(order);
+    }
+
+    if (req.query.canceledOnly === 'true') {
+      const order = await Order.findAll({
+        where: {
+          canceled_at: {
+            [Op.ne]: null,
+          },
+        },
+        include: [
+          {
+            model: Provider,
+            as: 'provider',
+            attributes: ['name', 'register_number'],
+          },
+          {
+            model: Product,
+            as: 'product',
+            attributes: ['name'],
+          },
+        ],
+      });
+      return res.json(order);
+    }
+
     const order = await Order.findAll({
+      where: { canceled_at: null },
       include: [
         {
           model: Provider,
@@ -20,6 +64,7 @@ class OrderControll {
         },
       ],
     });
+
     return res.json(order);
   }
 

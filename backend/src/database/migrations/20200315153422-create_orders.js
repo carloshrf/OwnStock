@@ -14,11 +14,15 @@ module.exports = {
       product_id: {
         type: Sequelize.INTEGER,
         references: { model: 'products', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
         allowNull: false,
       },
       provider_id: {
         type: Sequelize.INTEGER,
         references: { model: 'providers', key: 'id' },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
         allowNull: false,
       },
       quantity: {

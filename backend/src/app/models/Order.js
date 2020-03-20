@@ -1,6 +1,5 @@
 import Sequelize, { Model } from 'sequelize';
-import Product from './Product';
-// import QuantityController from '../controllers/QuantityController';
+import QuantityController from '../controllers/QuantityController';
 
 class Order extends Model {
   static init(sequelize) {
@@ -19,15 +18,22 @@ class Order extends Model {
 
     this.addHook('beforeSave', async order => {
       if (order.quantity) {
-        const product = await Product.findByPk(order.product_id);
-        if (order.type === true) {
-          product.quantity += order.quantity;
-          product.save();
-        } else {
-          product.quantity -= order.quantity;
-          product.save();
-        }
+        await QuantityController.updateOnCreate(
+          order.product_id,
+          order.quantity,
+          order.type
+        );
       }
+      // if (order.quantity) {
+      //   const product = await Product.findByPk(order.product_id);
+      //   if (order.type === true) {
+      //     product.quantity += order.quantity;
+      //     product.save();
+      //   } else {
+      //     product.quantity -= order.quantity;
+      //     product.save();
+      //   }
+      // }
     });
 
     // this.addHook('beforeUpdate', async order => {

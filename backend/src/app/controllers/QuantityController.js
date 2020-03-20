@@ -1,21 +1,17 @@
-// import Product from '../models/Product';
-// import Order from '../models/Order';
+import Product from '../models/Product';
 
-// class QuantityController {
-//   async updateOnCreate(productId, quantity, type) {
-//     if (quantity) {
-//       const product = await Product.findByPk(productId);
-//       if (type === true) {
-//         product.quantity += quantity;
-//         product.save();
-//       } else {
-//         product.quantity -= quantity;
-//         product.save();
-//       }
-//     }
+class QuantityController {
+  async updateOnCreate(prodId, newQuantity, type) {
+    const product = await Product.findByPk(prodId);
 
-//     return true;
-//   }
-// }
+    if (type === true) {
+      product.quantity += newQuantity;
+    } else {
+      product.id -= newQuantity;
+    }
 
-// export default new QuantityController();
+    await product.save();
+  }
+}
+
+export default new QuantityController();

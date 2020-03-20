@@ -16,40 +16,34 @@ class Order extends Model {
       }
     );
 
-    this.addHook('beforeSave', async order => {
+    this.addHook('beforeCreate', async order => {
       if (order.quantity) {
-        await QuantityController.updateOnCreate(
+        await QuantityController.changeOnCreate(
           order.product_id,
           order.quantity,
           order.type
         );
       }
-      // if (order.quantity) {
-      //   const product = await Product.findByPk(order.product_id);
-      //   if (order.type === true) {
-      //     product.quantity += order.quantity;
-      //     product.save();
-      //   } else {
-      //     product.quantity -= order.quantity;
-      //     product.save();
-      //   }
-      // }
     });
 
-    // this.addHook('beforeUpdate', async order => {
-    //   console.log(this.quantity, order.quantity);
-
-    //   if (order.quantity) {
-    //     const product = await Product.findByPk(order.product_id);
-    //     console.log(this.order.quantity, order.quantity);
-    //     if (order.type === true) {
-    //       product.quantity -= this.order.quantity - order.quantity;
-    //       product.save();
-    //     } else {
-    //       product.save();
-    //     }
-    //   }
-    // });
+    this.addHook('beforeUpdate', async order => {
+      if (order.quantity) {
+        const { quantity } = await Order.findByPk(order.id);
+        await QuantityController.changeOnUpdate(
+          order.product_id,
+          quantity,
+          order.quantity,
+          order.type
+        );
+      }
+      // if (order.quantity) {
+      //   await QuantityController.changeOnUpdate(
+      //     order.product_id,
+      //     order.quantity,
+      //     order.type
+      //   );
+      // }
+    });
 
     return this;
   }

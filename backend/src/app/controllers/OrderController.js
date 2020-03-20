@@ -81,6 +81,12 @@ class OrderControll {
       return res.status(401).json({ error: 'Data validation fails' });
     }
 
+    if (req.body.quantity <= 0) {
+      return res
+        .status(400)
+        .json({ error: 'You cannot create a order with quantity 0 or less' });
+    }
+
     const order = await Order.create(req.body);
 
     const newOrder = await Order.findOne({
@@ -113,6 +119,12 @@ class OrderControll {
 
     if (!(await schema.isValid(req.body))) {
       return res.status(401).json({ error: 'Data validation fails' });
+    }
+
+    if (req.body.quantity && req.body.quantity <= 0) {
+      return res
+        .status(400)
+        .json({ error: 'You cannot modify a order with quantity 0 or less' });
     }
 
     const canceled = req.body.canceled_at;

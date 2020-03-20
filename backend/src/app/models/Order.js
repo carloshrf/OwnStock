@@ -36,13 +36,6 @@ class Order extends Model {
           order.type
         );
       }
-      // if (order.quantity) {
-      //   await QuantityController.changeOnUpdate(
-      //     order.product_id,
-      //     order.quantity,
-      //     order.type
-      //   );
-      // }
     });
 
     return this;

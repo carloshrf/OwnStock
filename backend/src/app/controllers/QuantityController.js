@@ -27,15 +27,4 @@ class QuantityController {
   }
 }
 
-//   if (order.quantity) {
-//     const product = await Product.findByPk(order.product_id);
-//     console.log(this.order.quantity, order.quantity);
-//     if (order.type === true) {
-//       product.quantity -= this.order.quantity - order.quantity;
-//       product.save();
-//     } else {
-//       product.save();
-//     }
-//   }
-
 export default new QuantityController();

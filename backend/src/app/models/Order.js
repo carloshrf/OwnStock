@@ -10,6 +10,12 @@ class Order extends Model {
         price: Sequelize.DECIMAL,
         canceled_at: Sequelize.DATE,
         description: Sequelize.STRING,
+        total_value: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            return (this.quantity * this.price).toFixed(2);
+          },
+        },
       },
       {
         sequelize,
@@ -51,6 +57,10 @@ class Order extends Model {
       foreignKey: 'product_id',
       as: 'product',
     });
+  }
+
+  calculateTotalValue(order) {
+    return order.price * order.quantity;
   }
 }
 

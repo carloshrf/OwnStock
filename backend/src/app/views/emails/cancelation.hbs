@@ -1,0 +1,17 @@
+<strong>Olá, {{ user }}</strong>
+<p>Um movimento de {{ type }} foi cancelado.</p>
+<p><i>Detalhes:</i></p>
+<hr />
+<p>
+  <strong>Fornecedor:</strong> {{ provider }}<br />
+  <strong>Produto:</strong> {{ product }}<br />
+  <strong>Quantidade:</strong> {{ quantity }} {{ unit }}<br />
+  <strong>Preço unt.:</strong> R${{ price }}<br />
+  <strong>Valor total do pedido:</strong> R${{ total_value }}<br />
+  <strong>Cancelado:</strong> {{ canceled_at }}<br />
+</p>
+<hr />
+<small>
+  Motivo do cancelamento: <em>{{ description }}</em>
+</small>
+<hr />

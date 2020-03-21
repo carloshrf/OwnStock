@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import { parseISO } from 'date-fns';
 import { Op } from 'sequelize';
 import Order from '../models/Order';
 import Provider from '../models/Provider';
@@ -46,6 +45,7 @@ class OrderControll {
           },
         ],
       });
+
       return res.json(order);
     }
 
@@ -85,6 +85,12 @@ class OrderControll {
       return res
         .status(400)
         .json({ error: 'You cannot create a order with quantity 0 or less' });
+    }
+
+    if (req.body.canceled_at) {
+      return res
+        .status(401)
+        .json({ error: 'Orders can only be canceled on order problems' });
     }
 
     const order = await Order.create(req.body);
@@ -127,10 +133,10 @@ class OrderControll {
         .json({ error: 'You cannot modify a order with quantity 0 or less' });
     }
 
-    const canceled = req.body.canceled_at;
-
-    if (canceled) {
-      req.body.canceled_at = parseISO(req.body.canceled_at);
+    if (req.body.canceled_at) {
+      return res
+        .status(401)
+        .json({ error: 'Orders can only be canceled on order problems' });
     }
 
     const checkOrder = await Order.findOne({

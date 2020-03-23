@@ -24,6 +24,10 @@ class Provider extends Model {
     );
     return this;
   }
+
+  getTableName() {
+    return 'Provider';
+  }
 }
 
 export default Provider;

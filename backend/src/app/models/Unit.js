@@ -13,6 +13,10 @@ class Unit extends Model {
     );
     return this;
   }
+
+  getTableName() {
+    return 'Unit';
+  }
 }
 
 export default Unit;

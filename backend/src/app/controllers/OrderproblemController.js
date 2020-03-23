@@ -10,7 +10,15 @@ import Unit from '../models/Unit';
 
 class OrderproblemController {
   async index(req, res) {
-    const problem = await Orderproblem.findAll();
+    const problem = await Orderproblem.findAll({
+      include: [
+        {
+          model: Order,
+          as: 'order',
+          attributes: ['canceled_at'],
+        },
+      ],
+    });
     return res.json(problem);
   }
 

@@ -62,6 +62,10 @@ class Order extends Model {
   calculateTotalValue(order) {
     return order.price * order.quantity;
   }
+
+  getTableName() {
+    return 'Order';
+  }
 }
 
 export default Order;

@@ -20,6 +20,10 @@ class Order_problem extends Model {
       as: 'order',
     });
   }
+
+  getTableName() {
+    return 'Order Problem';
+  }
 }
 
 export default Order_problem;

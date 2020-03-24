@@ -1,12 +1,11 @@
-import { format } from 'date-fns';
-import { pt } from 'date-fns/locale';
 import Orderproblem from '../models/Orderproblem';
 import Order from '../models/Order';
 import Provider from '../models/Provider';
 import Product from '../models/Product';
-import Mail from '../../lib/Mail';
+import Queue from '../../lib/Queue';
 import User from '../models/User';
 import Unit from '../models/Unit';
+import CancelationMail from '../jobs/CancelationMail';
 
 class OrderproblemController {
   async index(req, res) {
@@ -81,28 +80,14 @@ class OrderproblemController {
 
     order.canceled_at = new Date();
 
-    await Mail.sendMail({
-      to: `${user.name} <${user.email}>`,
-      cc: `${order.provider.name} <${order.provider.email}>`,
-      subject: 'Pedido cancelado',
-      template: 'cancelation',
-      context: {
-        user: user.name,
-        type: Type,
-        provider: order.provider.name,
-        product: order.product.name,
-        quantity: order.quantity,
-        unit: order.product.unit.symbol,
-        price: order.price,
-        total_value: order.total_value,
-        canceled_at: format(order.canceled_at, "dd'/'mm'/'yyyy' ,às 'H:mm'h'", {
-          locale: pt,
-        }),
-        description: checkProblem.description,
-      },
-    });
-
     await order.save();
+
+    await Queue.add(CancelationMail.key, {
+      user,
+      order,
+      Type,
+      checkProblem,
+    });
 
     return res.json(order);
   }

@@ -23,9 +23,6 @@ class QuantityController {
       product.quantity += orderQuantity - newOrderQuantity;
     }
 
-    const a = product.Model.name;
-    console.log(a);
-
     return product.save();
   }
 }

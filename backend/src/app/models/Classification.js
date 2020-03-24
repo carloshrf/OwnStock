@@ -12,10 +12,6 @@ class Classification extends Model {
     );
     return this;
   }
-
-  getTableName() {
-    return 'Classification';
-  }
 }
 
 export default Classification;

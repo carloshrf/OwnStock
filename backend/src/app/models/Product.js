@@ -26,10 +26,6 @@ class Product extends Model {
       as: 'unit',
     });
   }
-
-  getTableName() {
-    return 'Product';
-  }
 }
 
 export default Product;

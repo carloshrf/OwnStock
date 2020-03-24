@@ -1,5 +1,6 @@
 import Sequelize from 'sequelize';
 import databaseConfig from '../config/database';
+import Audit from '../app/models/Audit';
 import User from '../app/models/User';
 import Order from '../app/models/Order';
 import Orderproblem from '../app/models/Orderproblem';
@@ -16,6 +17,7 @@ const models = [
   Provider,
   Order,
   Orderproblem,
+  Audit,
 ];
 
 class Database {

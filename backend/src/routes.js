@@ -9,6 +9,7 @@ import UnitController from './app/controllers/UnitController';
 import ProviderController from './app/controllers/ProviderController';
 import OrderController from './app/controllers/OrderController';
 import OrderproblemController from './app/controllers/OrderproblemController';
+import AuditController from './app/controllers/AuditController';
 
 const routes = new Router();
 
@@ -50,5 +51,7 @@ routes.get('/problems', OrderproblemController.index);
 routes.post('/problems', OrderproblemController.store);
 routes.put('/problems/:id', OrderproblemController.update);
 routes.delete('/problems/:id', OrderproblemController.delete);
+
+routes.get('/audit', AuditController.index);
 
 export default routes;

@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import Unit from '../models/Unit';
 import Product from '../models/Product';
+import Audit from '../models/Audit';
 
 class UnitControll {
   async index(req, res) {
@@ -21,7 +22,14 @@ class UnitControll {
 
     const unit = await Unit.create(req.body);
 
-    return res.json(unit);
+    return res.json(unit).then(() =>
+      Audit.create({
+        operation: req.method,
+        register_id: unit.id,
+        table: 'Unit',
+        user_id: req.userId,
+      })
+    );
   }
 
   async update(req, res) {

@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import Unit from '../models/Unit';
 import Classification from '../models/Classification';
 import Product from '../models/Product';
+import Audit from '../models/Audit';
 
 class ProductController {
   async index(req, res) {
@@ -56,6 +57,13 @@ class ProductController {
 
     const product = await Product.create(req.body);
 
+    Audit.create({
+      operation: req.method,
+      register_id: product.id,
+      table: 'Product',
+      user_id: req.userId,
+    });
+
     return res.json(product);
   }
 
@@ -82,6 +90,13 @@ class ProductController {
 
     const newProduct = await product.update(req.body);
 
+    Audit.create({
+      operation: req.method,
+      register_id: newProduct.id,
+      table: 'Product',
+      user_id: req.userId,
+    });
+
     return res.json(newProduct);
   }
 
@@ -95,6 +110,13 @@ class ProductController {
     }
 
     await product.destroy();
+
+    Audit.create({
+      operation: req.method,
+      register_id: product.id,
+      table: 'Product',
+      user_id: req.userId,
+    });
 
     return res.json(product);
   }

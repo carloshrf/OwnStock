@@ -3,6 +3,7 @@ import { Op } from 'sequelize';
 import Order from '../models/Order';
 import Provider from '../models/Provider';
 import Product from '../models/Product';
+import Audit from '../models/Audit';
 
 class OrderControll {
   async index(req, res) {
@@ -110,6 +111,14 @@ class OrderControll {
         },
       ],
     });
+
+    Audit.create({
+      operation: req.method,
+      register_id: order.id,
+      table: 'Order',
+      user_id: req.userId,
+    });
+
     return res.json(newOrder);
   }
 
@@ -149,6 +158,13 @@ class OrderControll {
 
     const order = await checkOrder.update(req.body);
 
+    Audit.create({
+      operation: req.method,
+      register_id: order.id,
+      table: 'Order',
+      user_id: req.userId,
+    });
+
     return res.json(order);
   }
 
@@ -162,6 +178,13 @@ class OrderControll {
     }
 
     await order.destroy();
+
+    Audit.create({
+      operation: req.method,
+      register_id: order.id,
+      table: 'Order',
+      user_id: req.userId,
+    });
 
     return res.json(order);
   }

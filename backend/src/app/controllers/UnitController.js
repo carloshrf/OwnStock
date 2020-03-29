@@ -29,8 +29,7 @@ class UnitControll {
       user_id: req.userId,
     });
 
-    return res.json(unit)
-
+    return res.json(unit);
   }
 
   async update(req, res) {

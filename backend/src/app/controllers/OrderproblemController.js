@@ -1,3 +1,4 @@
+import * as Yup from 'yup';
 import Orderproblem from '../models/Orderproblem';
 import Order from '../models/Order';
 import Provider from '../models/Provider';
@@ -6,6 +7,7 @@ import Queue from '../../lib/Queue';
 import User from '../models/User';
 import Unit from '../models/Unit';
 import CancelationMail from '../jobs/CancelationMail';
+import Audit from '../models/Audit';
 
 class OrderproblemController {
   async index(req, res) {
@@ -22,7 +24,33 @@ class OrderproblemController {
   }
 
   async store(req, res) {
+    const schema = Yup.object().shape({
+      order_id: Yup.number().required(),
+      description: Yup.string().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Data validation fails' });
+    }
+
+    const checkProblem = await Orderproblem.findOne({
+      where: { order_id: req.body.order_id },
+    });
+
+    if (checkProblem) {
+      return res
+        .status(400)
+        .json({ error: 'That order already have a registred problem' });
+    }
+
     const problem = await Orderproblem.create(req.body);
+
+    Audit.create({
+      operation: req.method,
+      register_id: problem.id,
+      table: 'Problem',
+      user_id: req.userId,
+    });
 
     return res.json(problem);
   }
@@ -36,7 +64,26 @@ class OrderproblemController {
         .json({ error: 'Does not exists a problem for this order ID' });
     }
 
+    if (req.body.order_id) {
+      const checkOrder = await Orderproblem.findOne({
+        where: { order_id: req.body.order_id },
+      });
+
+      if (checkOrder) {
+        return res
+          .status(401)
+          .json({ error: 'That order already have a registred problem' });
+      }
+    }
+
     const problem = await checkProblem.update(req.body);
+
+    Audit.create({
+      operation: req.method,
+      register_id: problem.id,
+      table: 'Problem',
+      user_id: req.userId,
+    });
 
     return res.json(problem);
   }
@@ -87,6 +134,13 @@ class OrderproblemController {
       order,
       Type,
       checkProblem,
+    });
+
+    Audit.create({
+      operation: req.method,
+      register_id: checkProblem.id,
+      table: 'Problem',
+      user_id: req.userId,
     });
 
     return res.json(order);

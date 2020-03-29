@@ -7,7 +7,7 @@ class Audit extends Model {
         operation: Sequelize.STRING,
         table: Sequelize.STRING,
         register_id: Sequelize.INTEGER,
-        user_name: Sequelize.STRING,
+        user_id: Sequelize.STRING,
       },
       {
         sequelize,

@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import Classification from '../models/Classification';
 import Product from '../models/Product';
+import Audit from '../models/Audit';
 
 class ClassificationController {
   async index(req, res) {
@@ -19,6 +20,14 @@ class ClassificationController {
     }
 
     const classification = await Classification.create(req.body);
+
+    Audit.create({
+      operation: req.method,
+      register_id: classification.id,
+      table: 'Classification',
+      user_id: req.userId,
+    });
+
     return res.json(classification);
   }
 
@@ -44,6 +53,13 @@ class ClassificationController {
 
     const newClassification = await classification.save();
 
+    Audit.create({
+      operation: req.method,
+      register_id: classification.id,
+      table: 'Classification',
+      user_id: req.userId,
+    });
+
     return res.json(newClassification);
   }
 
@@ -68,6 +84,13 @@ class ClassificationController {
     }
 
     await classification.destroy();
+
+    Audit.create({
+      operation: req.method,
+      register_id: classification.id,
+      table: 'Classification',
+      user_id: req.userId,
+    });
 
     return res.json(classification);
   }

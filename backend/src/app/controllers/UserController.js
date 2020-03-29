@@ -2,6 +2,7 @@
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import User from '../models/User';
+import Audit from '../models/Audit';
 
 class UserController {
   async index(req, res) {
@@ -37,6 +38,13 @@ class UserController {
     }
 
     const { id, name, email, job } = await User.create(req.body);
+
+    Audit.create({
+      operation: req.method,
+      register_id: id,
+      table: 'User',
+      user_id: req.userId,
+    });
 
     return res.json({
       id,
@@ -105,21 +113,35 @@ class UserController {
 
     const { id, name, email, job } = await checkUser.update(req.body);
 
+    Audit.create({
+      operation: req.method,
+      register_id: id,
+      table: 'User',
+      user_id: req.userId,
+    });
+
     return res.json({ id, name, email, job });
   }
 
   async delete(req, res) {
-    const checkUser = await User.findByPk(req.params.id, {
+    const user = await User.findByPk(req.params.id, {
       attributes: ['id', 'name', 'email', 'job'],
     });
 
-    if (!checkUser) {
+    if (!user) {
       return res.status(400).json({ error: 'This user does not exists' });
     }
 
-    await checkUser.destroy();
+    await user.destroy();
 
-    return res.json(checkUser);
+    Audit.create({
+      operation: req.method,
+      register_id: user.id,
+      table: 'User',
+      user_id: req.userId,
+    });
+
+    return res.json(user);
   }
 }
 

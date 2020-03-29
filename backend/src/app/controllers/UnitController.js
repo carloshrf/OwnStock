@@ -22,14 +22,15 @@ class UnitControll {
 
     const unit = await Unit.create(req.body);
 
-    return res.json(unit).then(() =>
-      Audit.create({
-        operation: req.method,
-        register_id: unit.id,
-        table: 'Unit',
-        user_id: req.userId,
-      })
-    );
+    Audit.create({
+      operation: req.method,
+      register_id: unit.id,
+      table: 'Unit',
+      user_id: req.userId,
+    });
+
+    return res.json(unit)
+
   }
 
   async update(req, res) {
@@ -53,6 +54,13 @@ class UnitControll {
     }
 
     await unit.update(req.body);
+
+    Audit.create({
+      operation: req.method,
+      register_id: unit.id,
+      table: 'Unit',
+      user_id: req.userId,
+    });
 
     return res.json({
       id: unit.id,
@@ -82,6 +90,13 @@ class UnitControll {
     }
 
     await unit.destroy();
+
+    Audit.create({
+      operation: req.method,
+      register_id: unit.id,
+      table: 'Unit',
+      user_id: req.userId,
+    });
 
     return res.json(unit);
   }

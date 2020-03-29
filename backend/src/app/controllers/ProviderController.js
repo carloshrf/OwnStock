@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 import { Op } from 'sequelize';
 import Provider from '../models/Provider';
+import Audit from '../models/Audit';
 
 class ProviderController {
   async index(req, res) {
@@ -45,6 +46,13 @@ class ProviderController {
     }
 
     const provider = await Provider.create(req.body);
+
+    Audit.create({
+      operation: req.method,
+      register_id: provider.id,
+      table: 'Provider',
+      user_id: req.userId,
+    });
 
     return res.json(provider);
   }
@@ -92,6 +100,14 @@ class ProviderController {
     }
 
     const provider = await checkProvider.update(req.body);
+
+    Audit.create({
+      operation: req.method,
+      register_id: provider.id,
+      table: 'Provider',
+      user_id: req.userId,
+    });
+
     return res.json(provider);
   }
 
@@ -102,6 +118,13 @@ class ProviderController {
     }
 
     await provider.destroy();
+
+    Audit.create({
+      operation: req.method,
+      register_id: provider.id,
+      table: 'Provider',
+      user_id: req.userId,
+    });
 
     return res.json(provider);
   }
